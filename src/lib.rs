@@ -14,13 +14,9 @@ impl Sequence {
 
     pub fn calculate_gc(&self) -> f64 {
 
-        let mut gc_total = 0;
-
-        for base in self.bases.chars() {
-            if base == 'g' || base == 'c' {
-                gc_total += 1
-            }
-        }
+        let gc_total: usize = self.bases
+            .chars()
+            .fold(0, |acc, b| acc + if b == 'g' || b == 'c' {1} else {0});
 
         gc_total as f64 / self.length() as f64
     }
