@@ -1,41 +1,15 @@
 use std::fs;
+pub mod sequence;
+use sequence::Sequence;
 
-#[derive(PartialEq, Debug)]
-pub struct Sequence {
-
-    /// Holds DNA sequence data.
-
-    pub name: String,
-    pub bases: String,
-}
-
-impl Sequence {
-
-    pub fn length(&self) -> usize {
-        self.bases.len()
-    }
-
-    pub fn calculate_gc(&self) -> f64 {
-
-        /// Returns the proportion of G or C residues in the sequence as a decimal.
-
-        let gc_total: usize = self.bases
-            .chars()
-            .fold(0, |acc, b| acc + if b == 'g' || b == 'c' {1} else {0});
-
-        gc_total as f64 / self.length() as f64
-    }
-}
-
+/// Checks that a string slice contains only valid DNA symbols.
 fn validate_dna(bases: &str) -> bool {
-    /// Checks that a string slice contains only valid DNA symbols.
     bases.chars().all(|c| matches!(c, 'a' | 'c' | 'g' | 't'))
 }
 
+/// Parses a set of sequences formatted as a fasta file into Sequence structs.
+/// Returns an Err if an invalid sequence is encountered.
 fn extract_sequences(fasta_string: String) -> Result<Vec<Sequence>, String> {
-
-    /// Parses a set of sequences formatted as a fasta file into Sequence structs.
-    /// Returns an Err if an invalid sequence is encountered.
 
     let lines: Vec<&str> = fasta_string.lines().collect();
 
@@ -63,9 +37,8 @@ fn extract_sequences(fasta_string: String) -> Result<Vec<Sequence>, String> {
     Ok(sequences)
 }
 
+/// Read a fasta-formatted string into a vector of Sequence structs.
 pub fn reads(fasta_string: String) -> Vec<Sequence> {
-
-    /// Read a fasta-formatted string into a vector of Sequence structs.
 
     match extract_sequences(fasta_string) {
         Ok(seqs) => seqs,
@@ -73,14 +46,13 @@ pub fn reads(fasta_string: String) -> Vec<Sequence> {
     }
 }
 
-pub fn read(path: &str) -> Vec<Sequence> {
 
-    /// Read a .fasta file into a vector of Sequence structs.
+/// Read a .fasta file into a vector of Sequence structs.
+pub fn read(path: &str) -> Vec<Sequence> {
 
     let contents = fs::read_to_string(path).unwrap();
     reads(contents)
 }
-
 
 
 #[cfg(test)]
@@ -109,7 +81,3 @@ mod tests {
         assert!(extract_sequences(fasta).is_err())
     }
 }
-
-// To-Do
-// Add testing
-// Add handling for malformed fasta files.
