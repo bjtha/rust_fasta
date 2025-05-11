@@ -2,6 +2,9 @@ use std::fs;
 
 #[derive(PartialEq, Debug)]
 pub struct Sequence {
+
+    /// Holds DNA sequence data.
+
     pub name: String,
     pub bases: String,
 }
@@ -14,6 +17,8 @@ impl Sequence {
 
     pub fn calculate_gc(&self) -> f64 {
 
+        /// Returns the proportion of G or C residues in the sequence as a decimal.
+
         let gc_total: usize = self.bases
             .chars()
             .fold(0, |acc, b| acc + if b == 'g' || b == 'c' {1} else {0});
@@ -23,10 +28,14 @@ impl Sequence {
 }
 
 fn validate_dna(bases: &str) -> bool {
+    /// Checks that a string slice contains only valid DNA symbols.
     bases.chars().all(|c| matches!(c, 'a' | 'c' | 'g' | 't'))
 }
 
 fn extract_sequences(fasta_string: String) -> Result<Vec<Sequence>, String> {
+
+    /// Parses a set of sequences formatted as a fasta file into Sequence structs.
+    /// Returns an Err if an invalid sequence is encountered.
 
     let lines: Vec<&str> = fasta_string.lines().collect();
 
@@ -55,6 +64,9 @@ fn extract_sequences(fasta_string: String) -> Result<Vec<Sequence>, String> {
 }
 
 pub fn reads(fasta_string: String) -> Vec<Sequence> {
+
+    /// Read a fasta-formatted string into a vector of Sequence structs.
+
     match extract_sequences(fasta_string) {
         Ok(seqs) => seqs,
         Err(msg) => panic!("{}", msg)
@@ -62,6 +74,9 @@ pub fn reads(fasta_string: String) -> Vec<Sequence> {
 }
 
 pub fn read(path: &str) -> Vec<Sequence> {
+
+    /// Read a .fasta file into a vector of Sequence structs.
+
     let contents = fs::read_to_string(path).unwrap();
     reads(contents)
 }
