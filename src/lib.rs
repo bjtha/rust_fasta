@@ -1,5 +1,6 @@
 use std::fs;
-pub mod sequence;
+mod sequence;
+
 use sequence::Sequence;
 
 /// Checks that a string slice contains only valid DNA symbols.

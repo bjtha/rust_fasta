@@ -29,7 +29,7 @@ mod test {
     fn example_sequence() -> Sequence {
         Sequence {
             name: String::from("TEST"),
-            bases: String::from("aattggcc")
+            bases: String::from("atgcca")
         }
     }
 
@@ -38,5 +38,4 @@ mod test {
         let seq = example_sequence();
         assert_eq!(seq.calculate_gc(), 0.5)
     }
-
 }
